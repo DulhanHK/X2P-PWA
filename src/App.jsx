@@ -1,0 +1,47 @@
+import React from 'react'
+import { HashRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { StoreProvider, useStore } from './store/store'
+import Login from './pages/Login'
+import Home from './pages/Home'
+import CaptureExpense from './pages/CaptureExpense'
+import Expenses from './pages/Expenses'
+import ExpenseDetail from './pages/ExpenseDetail'
+import Claims from './pages/Claims'
+import Profile from './pages/Profile'
+import './App.css'
+
+function Gate({ children }) {
+  const { state } = useStore()
+  if (!state.role) return <Navigate to="/login" replace />
+  return children
+}
+
+function Shell() {
+  const { state } = useStore()
+  return (
+    <Routes>
+      <Route path="/login" element={state.role ? <Navigate to="/home" replace /> : <Login />} />
+      <Route path="/home" element={<Gate><Home /></Gate>} />
+      <Route path="/capture" element={<Gate><CaptureExpense /></Gate>} />
+      <Route path="/expenses" element={<Gate><Expenses /></Gate>} />
+      <Route path="/expenses/:id" element={<Gate><ExpenseDetail /></Gate>} />
+      <Route path="/claims" element={<Gate><Claims /></Gate>} />
+      <Route path="/profile" element={<Gate><Profile /></Gate>} />
+      <Route path="*" element={<Navigate to={state.role ? '/home' : '/login'} replace />} />
+    </Routes>
+  )
+}
+
+export default function App() {
+  return (
+    <StoreProvider>
+      <div className="app-frame-outer">
+        <div className="app-frame">
+          <HashRouter>
+            <Shell />
+          </HashRouter>
+        </div>
+      </div>
+    </StoreProvider>
+  )
+}

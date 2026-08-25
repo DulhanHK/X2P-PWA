@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap');
+
+:root {
+  /* --- X2P design tokens (derived from brand mark, #046307) --- */
+  --x2p-green-900: #033d05;
+  --x2p-green-800: #054e08;
+  --x2p-green-700: #046307;
+  --x2p-green-600: #0c7a10;
+  --x2p-green-500: #1d8a22;
+  --x2p-green-100: #e2f0df;
+  --x2p-lime-400: #86c84a;
+  --x2p-lime-300: #a9dd77;
+  --x2p-amber-500: #c77f00;
+  --x2p-amber-100: #fbe8c9;
+  --x2p-rust-500: #b3492a;
+  --x2p-rust-100: #f6ddd2;
+
+  --x2p-paper: #f5f7f2;
+  --x2p-surface: #ffffff;
+  --x2p-ink: #10241a;
+  --x2p-ink-soft: #51655a;
+  --x2p-ink-faint: #8a9a8f;
+  --x2p-line: #dfe6da;
+
+  --font-display: 'Space Grotesk', 'Segoe UI', sans-serif;
+  --font-body: 'Inter', 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', 'SFMono-Regular', monospace;
+
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 22px;
+  --shadow-card: 0 1px 2px rgba(16, 36, 26, 0.06), 0 8px 24px -12px rgba(16, 36, 26, 0.18);
+  --shadow-pop: 0 12px 32px -8px rgba(4, 99, 7, 0.35);
+
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+
+html, body, #root { height: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background: #0c1a13;
+  color: var(--x2p-ink);
+  -webkit-tap-highlight-color: transparent;
+}
+
+button, input, select, textarea { font-family: inherit; }
+
+::selection { background: var(--x2p-lime-300); color: var(--x2p-green-900); }
+
+a { color: inherit; }
+
+:focus-visible {
+  outline: 2px solid var(--x2p-green-500);
+  outline-offset: 2px;
+}
+
+.app-frame-outer {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(120% 120% at 50% 0%, #0f2e14 0%, #071b0c 55%, #050f08 100%);
+  padding: 0;
+}
+
+.app-frame {
+  width: 100%;
+  max-width: 448px;
+  min-height: 100dvh;
+  background: var(--x2p-paper);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+
+@media (min-width: 560px) {
+  .app-frame-outer { padding: 32px 0; }
+  .app-frame {
+    min-height: 780px;
+    max-height: 900px;
+    border-radius: 36px;
+    border: 6px solid #0c1a13;
+  }
+}
+
+.app-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.app-scroll::-webkit-scrollbar { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}
