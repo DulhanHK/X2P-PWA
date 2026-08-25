@@ -89,7 +89,7 @@ export default function Login() {
             <div className="login-error"><AlertCircle size={14} /> <span>{error}</span></div>
           )}
 
-          <button className="sso-btn" type="submit" disabled={submitting} style={{ marginTop: 4 }}>
+          <button className="sso-btn" type="submit" disabled={submitting} style={{ marginTop: 24 }}>
             <ShieldCheck size={17} color="#046307" /> {submitting ? 'Signing in…' : 'Sign in'}
           </button>
 

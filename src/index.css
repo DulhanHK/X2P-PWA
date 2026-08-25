@@ -37,7 +37,7 @@
 
 * { box-sizing: border-box; }
 
-html, body, #root { height: 100%; }
+html, body, #root { height: 100%; overflow: hidden; }
 
 body {
   margin: 0;
@@ -59,18 +59,19 @@ a { color: inherit; }
 }
 
 .app-frame-outer {
-  min-height: 100dvh;
+  height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
   background: radial-gradient(120% 120% at 50% 0%, #0f2e14 0%, #071b0c 55%, #050f08 100%);
   padding: 0;
+  overflow: hidden;
 }
 
 .app-frame {
   width: 100%;
   max-width: 448px;
-  min-height: 100dvh;
+  height: 100dvh;
   background: var(--x2p-paper);
   position: relative;
   display: flex;
@@ -80,9 +81,12 @@ a { color: inherit; }
 }
 
 @media (min-width: 560px) {
-  .app-frame-outer { padding: 32px 0; }
+  .app-frame-outer { padding: 32px 0; height: 100dvh; }
   .app-frame {
-    min-height: 780px;
+    /* Fill whatever space is left after the outer padding, but never taller
+       than the viewport (a fixed height here would clip the header/footer
+       on shorter windows since the outer wrapper can't scroll). */
+    height: 100%;
     max-height: 900px;
     border-radius: 36px;
     border: 6px solid #0c1a13;

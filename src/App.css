@@ -265,10 +265,10 @@
 .login-screen {
   flex: 1; display: flex; flex-direction: column; justify-content: center;
   padding: 40px 30px; background: radial-gradient(140% 100% at 50% -10%, var(--x2p-green-700) 0%, var(--x2p-green-900) 62%);
-  color: #fff;
+  color: #fff; overflow-y: auto;
 }
-.login-logo { width: 76px; height: 76px; border-radius: 22px; background: #fff; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; box-shadow: var(--shadow-pop); }
-.login-logo img { width: 56px; height: 56px; object-fit: contain; }
+.login-logo { width: 56px; height: 56px; border-radius: 16px; background: #fff; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; box-shadow: var(--shadow-pop); }
+.login-logo img { width: 40px; height: 40px; object-fit: contain; }
 .login-title { font-family: var(--font-display); font-weight: 700; font-size: 26px; text-align: center; }
 .login-sub { text-align: center; font-size: 13px; color: rgba(255,255,255,0.7); margin-top: 6px; margin-bottom: 36px; }
 .sso-btn {

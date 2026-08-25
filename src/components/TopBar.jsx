@@ -2,6 +2,7 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useStore } from '../store/store'
 import { initials } from '../lib/format'
+import logo from '../assets/logo.png'
 
 export default function TopBar({ title, subtitle, onBack }) {
   const { state } = useStore()
@@ -10,8 +11,10 @@ export default function TopBar({ title, subtitle, onBack }) {
   return (
     <div className="topbar">
       <div className="topbar-left">
-        {onBack && (
+        {onBack ? (
           <button className="back-btn" onClick={onBack} aria-label="Back">←</button>
+        ) : (
+          <div className="topbar-logo"><img src={logo} alt="X2P" /></div>
         )}
         <div>
           <div className="topbar-title">{title}</div>
