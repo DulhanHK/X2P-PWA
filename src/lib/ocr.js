@@ -61,22 +61,16 @@ function matchCategory(raw) {
 
 function normalizeResult(raw) {
   return {
-    merchant: raw.merchant || '',
-    amount: String(raw.amount ?? ''),
+    merchant: raw.merchant || raw.vendor_name || '',
+    amount: String(raw.amount ?? raw.total_amount ?? ''),
     currency: raw.currency || 'GBP',
-    date: raw.date || new Date().toISOString().slice(0, 10),
+    date: raw.date || raw.invoice_date || new Date().toISOString().slice(0, 10),
     category: matchCategory(raw.category),
+    invoiceNumber: raw.invoice_number ?? raw.invoiceNumber ?? null,
     confidence: typeof raw.confidence === 'number' ? raw.confidence : null,
   }
 }
 
-/**
- * Send a captured receipt image to the OCR/AI extraction backend and return
- * the structured fields to pre-fill the review form with.
- *
- * @param {File} file - the receipt photo captured or chosen by the user
- * @returns {Promise<{merchant, amount, currency, date, category, confidence, mocked: boolean}>}
- */
 export async function scanReceipt(file) {
   if (!OCR_API_URL) {
     // ---- Mock mode: no backend configured yet ----
@@ -87,11 +81,10 @@ export async function scanReceipt(file) {
 
   // ---- Real mode: hosted OCR backend ----
   const body = new FormData()
-  body.append('receipt', file)
+  body.append('file', file)
 
-  const res = await fetch(`${OCR_API_URL}/scan`, {
+  const res = await fetch(`${OCR_API_URL}/invoices/extract`, {
     method: 'POST',
-    headers: OCR_API_KEY ? { Authorization: `Bearer ${OCR_API_KEY}` } : undefined,
     body,
   })
 
