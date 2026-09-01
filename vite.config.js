@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
  
 export default defineConfig({
-  base: '/xtp/app/',
+  base: '/',
  
   plugins: [
     react(),
@@ -25,8 +25,8 @@ export default defineConfig({
         display: 'standalone',
         orientation: 'portrait',
  
-        start_url: '/xtp/app/',
-        scope: '/xtp/app/',
+        start_url: '/',
+        scope: '/',
  
         icons: [
           {
@@ -85,7 +85,7 @@ export default defineConfig({
           '**/*.{js,css,html,png,svg,ico,woff2}'
         ],
  
-        navigateFallback: '/xtp/app/index.html',
+        navigateFallback: '/index.html',
  
         runtimeCaching: [
           {
