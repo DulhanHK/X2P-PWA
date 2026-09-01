@@ -1,7 +1,21 @@
-const SYMBOLS = { GBP: '£', USD: '$', EUR: '€', LKR: 'Rs ' }
+export function currencySymbol(currency = 'GBP') {
+  try {
+    const parts = new Intl.NumberFormat('en-GB', {
+      style: 'currency',
+      currency,
+      currencyDisplay: 'narrowSymbol',
+    }).formatToParts(0)
+    const symbolPart = parts.find((p) => p.type === 'currency')
+    return symbolPart ? symbolPart.value : `${currency} `
+  } catch (e) {
+    // Invalid/unrecognized ISO code (e.g. OCR hallucinated something) — fall
+    // back to showing the raw code instead of breaking the UI.
+    return `${currency} `
+  }
+}
 
 export function money(amount, currency = 'GBP') {
-  const sym = SYMBOLS[currency] || ''
+  const sym = currencySymbol(currency)
   return `${sym}${Number(amount).toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
 }
 

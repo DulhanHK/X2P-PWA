@@ -5,7 +5,7 @@ import { useStore, uid } from '../store/store'
 import { scanReceipt, AI_DISCLAIMER } from '../lib/ocr'
 import TopBar from '../components/TopBar'
 import ExpenseTypePicker from '../components/ExpenseTypePicker'
-import { money } from '../lib/format'
+import { money, currencySymbol } from '../lib/format'
 
 export default function CaptureExpense() {
   const { dispatch } = useStore()
@@ -131,7 +131,17 @@ export default function CaptureExpense() {
               </div>
               <div className="field">
                 <label>Amount {receipt && !extracted.failed && <span className="field-ocr">AI</span>}</label>
-                <input className="field-input" type="number" step="0.01" value={extracted.amount} onChange={(e) => setExtracted({ ...extracted, amount: e.target.value })} />
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <span style={{ fontWeight: 600, opacity: 0.7 }}>{currencySymbol(extracted.currency)}</span>
+                  <input
+                    className="field-input"
+                    type="number"
+                    step="0.01"
+                    value={extracted.amount}
+                    onChange={(e) => setExtracted({ ...extracted, amount: e.target.value })}
+                    style={{ flex: 1 }}
+                  />
+                </div>
               </div>
               <div className="field">
                 <label>Expense Type {receipt && !extracted.failed && <span className="field-ocr">Suggested</span>}</label>
