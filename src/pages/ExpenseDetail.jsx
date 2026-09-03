@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { Trash2, Check, X, Sparkles, ChevronRight } from 'lucide-react'
+import { Trash2, Check, X, Sparkles, ChevronRight, FileText } from 'lucide-react'
 import { useStore, actorName } from '../store/store'
 import TopBar from '../components/TopBar'
 import ExpenseTypePicker from '../components/ExpenseTypePicker'
@@ -214,7 +214,41 @@ export default function ExpenseDetail() {
 
           {tab === 'receipt' ? (
             expense.receiptImage ? (
-              <img src={expense.receiptImage} alt="Receipt" style={{ width: '100%', borderRadius: 12 }} />
+              <img
+                src={expense.receiptImage}
+                alt="Receipt attachment"
+                style={{ width: '100%', borderRadius: 12 }}
+              />
+            ) : expense.receiptAttachment || expense.receiptDocumentName ? (
+              <div
+                className="capture-preview"
+                style={{
+                  minHeight: 150,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 14,
+                  padding: 20,
+                  background: 'var(--x2p-surface)',
+                }}
+              >
+                <FileText size={36} color="var(--x2p-green-600)" />
+                <div style={{ minWidth: 0 }}>
+                  <div
+                    style={{
+                      fontWeight: 700,
+                      fontSize: 14,
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {expense.receiptAttachment?.name || expense.receiptDocumentName}
+                  </div>
+                  <div className="field-hint">
+                    {expense.receiptAttachment?.type || 'Document attachment'}
+                  </div>
+                </div>
+              </div>
             ) : (
               <div className="empty-state">
                 <p>No receipt attached to this expense.</p>

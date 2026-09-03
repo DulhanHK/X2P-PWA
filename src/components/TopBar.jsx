@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useStore } from '../store/store'
 import { initials } from '../lib/format'
 import logo from '../assets/logo.png'
+import { ChevronLeft } from 'lucide-react'
 
 export default function TopBar({ title, subtitle, onBack }) {
   const { state } = useStore()
@@ -12,7 +13,9 @@ export default function TopBar({ title, subtitle, onBack }) {
     <div className="topbar">
       <div className="topbar-left">
         {onBack ? (
-          <button className="back-btn" onClick={onBack} aria-label="Back">←</button>
+          <button className="back-btn" onClick={onBack} aria-label="Back">
+            <ChevronLeft size={18} strokeWidth={2.25} />
+          </button>
         ) : (
           <div className="topbar-logo"><img src={logo} alt="X2P" /></div>
         )}
