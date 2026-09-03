@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useId, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Inbox, Plus, FilePlus2, Camera, ImagePlus, Upload, Send } from 'lucide-react'
 import { useStore, actorName } from '../store/store'
@@ -11,6 +11,9 @@ import { money } from '../lib/format'
 export default function Expenses() {
   const { state, dispatch } = useStore()
   const nav = useNavigate()
+  const cameraInputId = useId()
+  const photoInputId = useId()
+  const documentInputId = useId()
   const [addSheet, setAddSheet] = useState(false)
   const [selectMode, setSelectMode] = useState(false)
   const [selectedIds, setSelectedIds] = useState([])
@@ -32,6 +35,16 @@ export default function Expenses() {
   function addVia(mode) {
     setAddSheet(false)
     nav('/capture', { state: { mode } })
+  }
+
+  function captureFile(event, mode) {
+    const file = event.target.files?.[0]
+    event.target.value = ''
+
+    if (!file) return
+
+    setAddSheet(false)
+    nav('/capture', { state: { mode, file } })
   }
 
   function toggleSelect(id) {
@@ -99,6 +112,28 @@ export default function Expenses() {
       {addSheet && (
         <div className="sheet-backdrop" onClick={() => setAddSheet(false)}>
           <div className="sheet" onClick={(e) => e.stopPropagation()}>
+            <input
+              id={cameraInputId}
+              type="file"
+              accept="image/*"
+              capture="environment"
+              hidden
+              onChange={(event) => captureFile(event, 'camera')}
+            />
+            <input
+              id={photoInputId}
+              type="file"
+              accept="image/*"
+              hidden
+              onChange={(event) => captureFile(event, 'library')}
+            />
+            <input
+              id={documentInputId}
+              type="file"
+              accept="application/pdf,.pdf"
+              hidden
+              onChange={(event) => captureFile(event, 'file')}
+            />
             <div className="sheet-handle" />
             <div className="sheet-title">Add an expense</div>
             <div style={{ display: 'grid', gap: 4, marginTop: 12 }}>
@@ -106,18 +141,18 @@ export default function Expenses() {
                 <div className="merchant-badge"><FilePlus2 size={17} /></div>
                 <div className="card-body"><div className="card-merchant">Create Manual Expense</div></div>
               </button>
-              <button className="list-row" onClick={() => addVia('camera')}>
+              <label className="list-row" htmlFor={cameraInputId}>
                 <div className="merchant-badge"><Camera size={17} /></div>
                 <div className="card-body"><div className="card-merchant">Take Photo</div></div>
-              </button>
-              <button className="list-row" onClick={() => addVia('library')}>
+              </label>
+              <label className="list-row" htmlFor={photoInputId}>
                 <div className="merchant-badge"><ImagePlus size={17} /></div>
                 <div className="card-body"><div className="card-merchant">Upload Photo</div></div>
-              </button>
-              <button className="list-row" onClick={() => addVia('file')}>
+              </label>
+              <label className="list-row" htmlFor={documentInputId}>
                 <div className="merchant-badge"><Upload size={17} /></div>
                 <div className="card-body"><div className="card-merchant">Upload File</div></div>
-              </button>
+              </label>
             </div>
           </div>
         </div>

@@ -12,7 +12,7 @@ import {
   Sparkles,
 } from 'lucide-react'
 import { useStore, uid } from '../store/store'
-import { scanReceipt, AI_DISCLAIMER } from '../lib/ocr'
+import { compressReceiptImage, scanReceipt, AI_DISCLAIMER } from '../lib/ocr'
 import TopBar from '../components/TopBar'
 import ExpenseTypePicker from '../components/ExpenseTypePicker'
 import { money, currencySymbol, currencyName } from '../lib/format'
@@ -44,29 +44,22 @@ export default function CaptureExpense() {
       return
     }
 
-    if (routeState?.mode === 'camera') {
-      cameraInputRef.current?.click()
-      return
-    }
-
-    if (routeState?.mode === 'library') {
-      photoInputRef.current?.click()
-      return
-    }
-
-    if (routeState?.mode === 'file') {
-      documentInputRef.current?.click()
+    if (routeState?.file instanceof File) {
+      processFile(routeState.file)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  async function handleFile(event) {
+  function handleFile(event) {
     const file = event.target.files?.[0]
-
-    // Lets the user select the same file again after retrying.
     event.target.value = ''
 
-    if (!file) return
+    if (file) {
+      processFile(file)
+    }
+  }
+
+  async function processFile(file) {
 
     const isImage = file.type.startsWith('image/')
     const isPdf =
@@ -82,14 +75,16 @@ export default function CaptureExpense() {
       URL.revokeObjectURL(receipt)
     }
 
-    setReceipt(isImage ? URL.createObjectURL(file) : null)
+    const ocrFile = isImage ? await compressReceiptImage(file) : file
+
+    setReceipt(isImage ? URL.createObjectURL(ocrFile) : null)
     setDocument(isPdf ? { name: file.name, size: file.size } : null)
     setScanning(true)
     setScanError(null)
     setExtracted(null)
 
     try {
-      const result = await scanReceipt(file)
+      const result = await scanReceipt(ocrFile)
       setExtracted(result)
     } catch (error) {
       setScanError(
