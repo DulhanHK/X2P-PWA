@@ -20,6 +20,7 @@ function normalizeResult(raw) {
     currency: raw.currency || 'GBP',
     date: raw.date || raw.invoice_date || new Date().toISOString().slice(0, 10),
     category: matchCategory(raw.category),
+    country: raw.country || raw.vendor_country || raw.merchant_country || '',
     location: raw.location || raw.vendor_address || raw.merchant_address || raw.address || '',
     invoiceNumber: raw.invoice_number ?? raw.invoiceNumber ?? null,
     confidence: typeof raw.confidence === 'number' ? raw.confidence : null,

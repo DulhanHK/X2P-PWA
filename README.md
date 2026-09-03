@@ -42,7 +42,7 @@ Expense created (ExpenseIt / manual)
         ▼
   manager Approves ──► Approved ──► (simulated finance settlement) ──► Paid
         │
-        └─ manager Sends Back ──► Sent Back ──► employee edits & resubmits
+        └─ manager Rejects ──► Rejected
 ```
 
 ## What's mocked (and what a production build needs)

@@ -23,8 +23,8 @@ export const STATUS_META = {
   draft: { label: 'Not Submitted', className: 'status-draft' },
   submitted: { label: 'Submitted', className: 'status-submitted' },
   approved: { label: 'Approved', className: 'status-manager-approved' },
+  rejected: { label: 'Rejected', className: 'status-rejected' },
   paid: { label: 'Paid', className: 'status-paid' },
-  sent_back: { label: 'Sent Back', className: 'status-returned' },
 }
 
 export function timeAgo(iso) {

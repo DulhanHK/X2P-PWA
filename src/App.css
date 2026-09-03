@@ -144,7 +144,7 @@
 .status-manager-approved { background: #dceafd; color: #1a5fb4; }
 .status-finance-approved { background: #e2f0df; color: var(--x2p-green-700); }
 .status-paid { background: var(--x2p-green-700); color: #fff; }
-.status-returned, .status-rejected { background: var(--x2p-rust-100); color: var(--x2p-rust-500); }
+.status-rejected { background: var(--x2p-rust-100); color: var(--x2p-rust-500); }
 
 .empty-state {
   text-align: center; padding: 44px 20px;
@@ -548,4 +548,54 @@
   padding: 18px; margin: -46px 20px 16px; position: relative; z-index: 2; box-shadow: var(--shadow-card);
 }
 .report-total-band .amt { font-family: var(--font-mono); font-size: 26px; font-weight: 600; }
+.personal-expense-switch {
+  width: 46px;
+  height: 26px;
+  padding: 3px;
+  border: 1.5px solid var(--x2p-green-700);
+  border-radius: 999px;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
 
+.personal-expense-switch:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.personal-expense-track {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.personal-expense-thumb {
+  width: 20px;
+  height: 20px;
+  border: 1.5px solid var(--x2p-green-700);
+  border-radius: 50%;
+  background: var(--x2p-surface);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.22);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.personal-expense-switch.is-on {
+  background: var(--x2p-rust-500);
+  border-color: var(--x2p-rust-500);
+}
+
+.personal-expense-switch.is-on .personal-expense-thumb {
+  border-color: #fff;
+  transform: translateX(20px);
+}
+
+.field-error {
+  margin-top: 6px;
+  color: var(--x2p-rust-500);
+  font-size: 11.5px;
+  font-weight: 600;
+  line-height: 1.35;
+}

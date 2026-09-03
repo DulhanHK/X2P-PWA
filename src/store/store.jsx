@@ -3,7 +3,7 @@ import React, { createContext, useContext, useEffect, useReducer } from 'react'
 // Bump this whenever the expense/report shape changes so stale cached data
 // (e.g. old reportId-based expenses without status/history) doesn't crash
 // screens that assume the new shape.
-const STORAGE_KEY = 'x2p.v3'
+const STORAGE_KEY = 'x2p.v6'
 
 // Grouped expense types, matching the company's real chart-of-accounts
 // expense types (GL code shown in parentheses where one applies).
@@ -118,7 +118,7 @@ const CATEGORY_GROUPS = [
   },
 ]
 const CATEGORIES = CATEGORY_GROUPS.flatMap((g) => g.types)
-const PAYMENT_TYPES = ['Company Card', 'Cash / Out of Pocket']
+const PAYMENT_TYPES = ['Cash', 'Company Paid']
 const CURRENCIES = ['GBP', 'USD', 'EUR', 'LKR']
 
 function uid(prefix = 'id') {
@@ -133,17 +133,21 @@ const seedExpenses = [
   { id: uid('exp'), merchant: 'Uber', date: daysAgo(1), amount: 27.8, currency: 'GBP', category: 'Taxi (7-4300)', paymentType: 'Company Card', businessPurpose: '', notes: '', receiptImage: null, source: 'card', status: 'draft', history: [{ status: 'draft', actor: 'Radika G.', at: daysAgo(1) }] },
   { id: uid('exp'), merchant: 'The Ivy Brasserie', date: daysAgo(2), amount: 84.5, currency: 'GBP', category: 'Entertainment - Client (7-4500)', paymentType: 'Company Card', businessPurpose: 'Client dinner — Q3 renewal discussion', notes: '', receiptImage: null, source: 'expenseit', status: 'submitted', history: [{ status: 'draft', actor: 'Radika G.', at: daysAgo(3) }, { status: 'submitted', actor: 'Radika G.', at: daysAgo(2) }] },
   { id: uid('exp'), merchant: 'Heathrow Express', date: daysAgo(4), amount: 38.9, currency: 'GBP', category: 'Train (7-4330)', paymentType: 'Cash / Out of Pocket', businessPurpose: 'Site visit — Manchester distribution centre', notes: '', receiptImage: null, source: 'expenseit', status: 'submitted', history: [{ status: 'draft', actor: 'Radika G.', at: daysAgo(5) }, { status: 'submitted', actor: 'Radika G.', at: daysAgo(4) }] },
-  { id: uid('exp'), merchant: 'Premier Inn Manchester', date: daysAgo(4), amount: 119, currency: 'GBP', category: 'Hotel', paymentType: 'Company Card', businessPurpose: 'Site visit — overnight stay', notes: '', receiptImage: null, source: 'card', status: 'submitted', history: [{ status: 'draft', actor: 'Radika G.', at: daysAgo(5) }, { status: 'submitted', actor: 'Radika G.', at: daysAgo(4) }] },
+  { id: uid('exp'), merchant: 'Premier Inn Manchester', date: daysAgo(4), amount: 119, currency: 'GBP', category: 'Hotel', paymentType: 'Company Card', businessPurpose: 'Site visit — overnight stay', notes: '', receiptImage: null, source: 'card', status: 'approved', history: [
+    { status: 'draft', actor: 'Radika G.', at: daysAgo(6) },
+    { status: 'submitted', actor: 'Radika G.', at: daysAgo(5) },
+    { status: 'approved', actor: 'D. Wickramasinghe', at: daysAgo(3) },
+  ] },
   { id: uid('exp'), merchant: 'BT Business', date: daysAgo(14), amount: 210, currency: 'GBP', category: 'Telephone/Internet/Fax (7-3200)', paymentType: 'Company Card', businessPurpose: 'Site broadband — Vauxhall office', notes: 'Monthly recurring', receiptImage: null, source: 'manual', status: 'paid', history: [
     { status: 'draft', actor: 'Radika G.', at: daysAgo(15) },
     { status: 'submitted', actor: 'Radika G.', at: daysAgo(14) },
     { status: 'approved', actor: 'D. Wickramasinghe', at: daysAgo(12) },
     { status: 'paid', actor: 'Finance / PIS Settlement', at: daysAgo(8) },
   ] },
-  { id: uid('exp'), merchant: 'DHL Express', date: daysAgo(6), amount: 56.2, currency: 'GBP', category: 'Courier/Shipping/Freight (6-4100)', paymentType: 'Cash / Out of Pocket', businessPurpose: 'Sample shipment to Colombo warehouse', notes: '', receiptImage: null, source: 'expenseit', status: 'sent_back', history: [
+  { id: uid('exp'), merchant: 'DHL Express', date: daysAgo(6), amount: 56.2, currency: 'GBP', category: 'Courier/Shipping/Freight (6-4100)', paymentType: 'Cash / Out of Pocket', businessPurpose: 'Sample shipment to Colombo warehouse', notes: '', receiptImage: null, source: 'expenseit', status: 'rejected', history: [
     { status: 'draft', actor: 'Radika G.', at: daysAgo(7) },
     { status: 'submitted', actor: 'Radika G.', at: daysAgo(6) },
-    { status: 'sent_back', actor: 'D. Wickramasinghe', at: daysAgo(5), comment: 'Please attach the customs invoice as a second page.' },
+    { status: 'rejected', actor: 'D. Wickramasinghe', at: daysAgo(5), comment: 'Missing customs invoice for this shipment.' },
   ] },
 ]
 
@@ -190,7 +194,7 @@ function reducer(state, action) {
     }
 
     case 'EXPENSE_ACTION': {
-      // action.status: 'approved' | 'sent_back' | 'paid'
+      // action.status: 'approved' | 'rejected' | 'paid'
       const now = new Date().toISOString()
       return {
         ...state,

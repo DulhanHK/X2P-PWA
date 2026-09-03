@@ -25,7 +25,7 @@ export default function Expenses() {
 
   // Concur lets you tick expenses and submit them as a report in one go —
   // we submit each selected expense as its own claim instead of a report.
-  const submittable = filtered.filter((e) => e.status === 'draft' || e.status === 'sent_back')
+  const submittable = filtered.filter((e) => e.status === 'draft')
   const selectedExpenses = submittable.filter((e) => selectedIds.includes(e.id))
   const selectedTotal = selectedExpenses.reduce((s, e) => s + e.amount, 0)
 
@@ -76,7 +76,7 @@ export default function Expenses() {
             </div>
           ) : (
             filtered.map((e) => {
-              const canSelect = selectMode && (e.status === 'draft' || e.status === 'sent_back')
+              const canSelect = selectMode && e.status === 'draft'
               return (
                 <ExpenseRow
                   key={e.id}
