@@ -11,17 +11,17 @@ import { money } from '../lib/format'
 export default function Expenses() {
   const { state, dispatch } = useStore()
   const nav = useNavigate()
-  const [filter, setFilter] = useState('all') // all | draft | submitted
   const [addSheet, setAddSheet] = useState(false)
   const [selectMode, setSelectMode] = useState(false)
   const [selectedIds, setSelectedIds] = useState([])
+  const [filter, setFilter] = useState('all') // all | draft | submitted
 
-  const filtered = useMemo(() => {
-    const sorted = [...state.expenses].sort((a, b) => new Date(b.date) - new Date(a.date))
-    if (filter === 'draft') return sorted.filter((e) => e.status === 'draft')
-    if (filter === 'submitted') return sorted.filter((e) => e.status !== 'draft')
-    return sorted
-  }, [state.expenses, filter])
+  const filtered = useMemo(
+  () => [...state.expenses]
+    .filter((e) => e.status === 'draft')
+    .sort((a, b) => new Date(b.date) - new Date(a.date)),
+  [state.expenses]
+)
 
   // Concur lets you tick expenses and submit them as a report in one go —
   // we submit each selected expense as its own claim instead of a report.
@@ -56,18 +56,7 @@ export default function Expenses() {
       <div className="app-scroll">
         <div className="page" style={{ paddingTop: 0 }}>
           <SectionTabs active="expenses" />
-          {submittable.length > 0 && (
-            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 6 }}>
-              <button className="btn-ghost" style={{ fontWeight: 700, fontSize: 12.5, color: 'var(--x2p-green-700)', padding: '2px 4px' }} onClick={() => (selectMode ? exitSelectMode() : setSelectMode(true))}>
-                {selectMode ? 'Cancel' : 'Select'}
-              </button>
-            </div>
-          )}
-          <div className="segmented" style={{ marginBottom: 6 }}>
-            <button className={filter === 'all' ? 'active' : ''} onClick={() => setFilter('all')}>All</button>
-            <button className={filter === 'draft' ? 'active' : ''} onClick={() => setFilter('draft')}>Not Submitted</button>
-            <button className={filter === 'submitted' ? 'active' : ''} onClick={() => setFilter('submitted')}>Submitted</button>
-          </div>
+          
           <div className="section-title">&nbsp;</div>
           {filtered.length === 0 ? (
             <div className="empty-state">
@@ -85,6 +74,7 @@ export default function Expenses() {
                   selectable={canSelect}
                   selected={selectedIds.includes(e.id)}
                   onToggleSelect={() => toggleSelect(e.id)}
+                  onLongPress={!selectMode ? () => { setSelectMode(true); toggleSelect(e.id) } : undefined}
                 />
               )
             })

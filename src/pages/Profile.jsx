@@ -1,5 +1,5 @@
 import React from 'react'
-import { ShieldCheck, Fingerprint, Smartphone, Info } from 'lucide-react'
+import { User, Mail, Building2, Info } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useStore } from '../store/store'
 import TopBar from '../components/TopBar'
@@ -19,15 +19,14 @@ export default function Profile() {
             <div className="merchant-badge" style={{ width: 52, height: 52, fontSize: 17 }}>{initials(state.user.name)}</div>
             <div>
               <div style={{ fontWeight: 700, fontSize: 15 }}>{state.user.name}</div>
-              <div className="field-hint" style={{ marginTop: 2 }}>{state.user.title} · {state.user.entity}</div>
+              <div className="field-hint" style={{ marginTop: 2 }}>{state.user.email}</div>
             </div>
           </div>
 
-          <div className="section-title">Security</div>
+          <div className="section-title">Details</div>
           <div className="card">
-            <div className="kv-row"><span className="kv-label"><ShieldCheck size={14} style={{ verticalAlign: -2, marginRight: 6 }} />Signed in as</span><span className="kv-value">{state.user.name}</span></div>
-            <div className="kv-row"><span className="kv-label"><Fingerprint size={14} style={{ verticalAlign: -2, marginRight: 6 }} />Biometric unlock</span><span className="kv-value">Enabled</span></div>
-            <div className="kv-row"><span className="kv-label"><Smartphone size={14} style={{ verticalAlign: -2, marginRight: 6 }} />Device sync</span><span className="kv-value">Up to date</span></div>
+            <div className="kv-row"><span className="kv-label"><User size={14} style={{ verticalAlign: -2, marginRight: 6 }} />User Name</span><span className="kv-value">{state.user.name}</span></div>
+            <div className="kv-row"><span className="kv-label"><Building2 size={14} style={{ verticalAlign: -2, marginRight: 6 }} />Department</span><span className="kv-value">{state.user.department}</span></div>
           </div>
 
           <div className="section-title">Demo mode</div>

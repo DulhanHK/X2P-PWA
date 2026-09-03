@@ -3,7 +3,7 @@ import React, { createContext, useContext, useEffect, useReducer } from 'react'
 // Bump this whenever the expense/report shape changes so stale cached data
 // (e.g. old reportId-based expenses without status/history) doesn't crash
 // screens that assume the new shape.
-const STORAGE_KEY = 'x2p.v6'
+const STORAGE_KEY = 'x2p.v8'
 
 // Grouped expense types, matching the company's real chart-of-accounts
 // expense types (GL code shown in parentheses where one applies).
@@ -158,7 +158,7 @@ function loadInitial() {
   } catch (e) { /* corrupt cache, fall through to seed */ }
   return {
     role: null,
-    user: { name: 'Radika Gunawardana', title: 'Solutions Lead', entity: 'Hela Brands UK', department: 'Commercial' },
+    user: { name: 'RadikaG', email: 'radika.gunawardana@helabrands.com', department: 'Commercial' },
     expenses: seedExpenses,
   }
 }

@@ -31,8 +31,8 @@ const AUTH_API_URL = import.meta.env.VITE_AUTH_API_URL || ''
 export const AUTH_MOCK_MODE = !AUTH_API_URL
 
 const MOCK_PROFILES = {
-  employee: { name: 'Radika Gunawardana', title: 'Solutions Lead', entity: 'Hela Brands UK', department: 'Commercial', role: 'employee' },
-  manager: { name: 'D. Wickramasinghe', title: 'Regional Ops Manager', entity: 'Hela Brands UK', department: 'Commercial', role: 'manager' },
+  employee: { name: 'RadikaG', email: 'radika.gunawardana@helabrands.com', department: 'Commercial', role: 'employee' },
+  manager: { name: 'D. Wickramasinghe', email: 'd.wickramasinghe@helabrands.com',department: 'Commercial', role: 'manager' },
 }
 
 /**

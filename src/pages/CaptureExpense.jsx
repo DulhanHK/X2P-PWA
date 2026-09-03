@@ -5,7 +5,7 @@ import { useStore, uid } from '../store/store'
 import { scanReceipt, AI_DISCLAIMER } from '../lib/ocr'
 import TopBar from '../components/TopBar'
 import ExpenseTypePicker from '../components/ExpenseTypePicker'
-import { money, currencySymbol } from '../lib/format'
+import { money, currencySymbol, currencyName } from '../lib/format'
 import CurrencyPicker from '../components/CurrencyPicker'
 
 export default function CaptureExpense() {
@@ -239,7 +239,7 @@ export default function CaptureExpense() {
                     color: 'inherit',
                   }}
                 >
-                  <span>{extracted.currency || 'Select currency'}</span>
+                  <span>{extracted.currency ? currencyName(extracted.currency) : 'Select currency'}</span>
                   <ChevronRight size={15} />
                 </button>
                 {errors.currency && <div className="field-error">{errors.currency}</div>}

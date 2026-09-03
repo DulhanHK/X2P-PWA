@@ -4,7 +4,7 @@ import { Trash2, Check, X, Sparkles, ChevronRight } from 'lucide-react'
 import { useStore, actorName } from '../store/store'
 import TopBar from '../components/TopBar'
 import ExpenseTypePicker from '../components/ExpenseTypePicker'
-import { money, STATUS_META, timeAgo } from '../lib/format'
+import { money, STATUS_META, timeAgo, currencyName } from '../lib/format'
 import CountryPicker from '../components/CountryPicker'
 import CurrencyPicker from '../components/CurrencyPicker'
 import BrandPicker from '../components/BrandPicker'
@@ -202,8 +202,8 @@ export default function ExpenseDetail() {
           )}
         </div>
 
-        <div className="page" style={{ paddingTop: 0 }}>
-          <div className="tab-row" style={{ marginTop: -34, position: 'relative', zIndex: 2 }}>
+        <div className="page expense-detail-page">
+  <div className="tab-row expense-detail-tabs">
             <button className={tab === 'details' ? 'active' : ''} onClick={() => setTab('details')}>
               Details
             </button>
@@ -366,7 +366,7 @@ export default function ExpenseDetail() {
                     color: 'inherit',
                   }}
                 >
-                  <span>{expense.currency || 'Select currency'}</span>
+                  <span>{expense.currency ? currencyName(expense.currency) : 'Select currency'}</span>
                   {editable && <ChevronRight size={15} />}
                 </button>
                 {errors.currency && <div className="field-error">{errors.currency}</div>}

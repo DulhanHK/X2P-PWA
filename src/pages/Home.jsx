@@ -36,8 +36,7 @@ export default function Home() {
             <button className="tile" onClick={() => nav('/expenses')}>
               <div className="tile-icon"><Receipt size={17} /></div>
               <div className="tile-label">Expenses</div>
-              <div className="tile-count"><b>{state.expenses.length}</b> total · {money(sum(state.expenses), 'GBP')}</div>
-              <div className="tile-count">{drafts.length} not submitted · {money(sum(drafts), 'GBP')}</div>
+              <div className="tile-count"><b>{drafts.length}</b> not submitted · {money(sum(drafts), 'GBP')}</div>
             </button>
             <button className="tile" onClick={() => nav('/claims')}>
               <div className="tile-icon"><ClipboardCheck size={17} /></div>

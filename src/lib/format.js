@@ -19,6 +19,16 @@ export function money(amount, currency = 'GBP') {
   return `${sym}${Number(amount).toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
 }
 
+export function currencyName(currency = 'GBP') {
+  try {
+    const name = new Intl.DisplayNames(['en-GB'], { type: 'currency' }).of(currency)
+    return `${name} (${currency})`
+  } catch (e) {
+    // Invalid/unrecognized ISO code — fall back to the raw code.
+    return currency
+  }
+}
+
 export const STATUS_META = {
   draft: { label: 'Not Submitted', className: 'status-draft' },
   submitted: { label: 'Submitted', className: 'status-submitted' },
