@@ -1,11 +1,11 @@
 import React, { useId } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Camera, Receipt, ClipboardCheck, Inbox } from 'lucide-react'
+import { Camera, Receipt, Inbox } from 'lucide-react'
 import { useStore } from '../store/store'
 import TopBar from '../components/TopBar'
 import BottomNav from '../components/BottomNav'
 import ExpenseRow from '../components/ExpenseRow'
-import { money } from '../lib/format'
+import { money, STATUS_META, timeAgo } from '../lib/format'
 import useOnline from '../lib/useOnline'
 
 export default function Home() {
@@ -15,8 +15,11 @@ export default function Home() {
   const cameraInputId = useId()
 
   const drafts = state.expenses.filter((e) => e.status === 'draft')
-  const pendingApprovals = state.expenses.filter((e) => e.status === 'submitted')
-  const totalClaims = state.expenses.filter((e) => e.status !== 'draft')
+  const pendingClaims = state.expenses
+  .filter((expense) => expense.status === 'submitted')
+  .sort((firstExpense, secondExpense) =>
+    new Date(secondExpense.date) - new Date(firstExpense.date)
+  )
   const sum = (list) => list.reduce((s, e) => s + e.amount, 0)
 
   function captureReceipt(event) {
@@ -63,32 +66,58 @@ export default function Home() {
             </div>
           </label>
 
-          <div className="tile-grid">
-            <button className="tile" onClick={() => nav('/expenses')}>
-              <div className="tile-icon">
-                <Receipt size={17} />
-              </div>
-              <div className="tile-label">Expenses</div>
-              <div className="tile-count">
-                <b>{drafts.length}</b> not submitted · {money(sum(drafts), 'GBP')}
-              </div>
-            </button>
+          {pendingClaims.length > 0 && (
+  <>
+    <div className="home-section-heading">
+      <div className="section-title">Claim requests</div>
 
-            <button className="tile" onClick={() => nav('/claims')}>
-              <div className="tile-icon">
-                <ClipboardCheck size={17} />
-              </div>
-              <div className="tile-label">Claims</div>
-              <div className="tile-count">
-                <b>{totalClaims.length}</b> total · {money(sum(totalClaims), 'GBP')}
-              </div>
-              <div className="tile-count">
-                {pendingApprovals.length}{' '}
-                {state.role === 'manager' ? 'pending you' : 'pending'} ·{' '}
-                {money(sum(pendingApprovals), 'GBP')}
-              </div>
-            </button>
-          </div>
+      <button
+        type="button"
+        className="home-section-link"
+        onClick={() => nav('/claims')}
+      >
+        View all
+      </button>
+    </div>
+
+    <div className="claim-request-scroll">
+      {pendingClaims.map((expense) => {
+        const status = STATUS_META[expense.status]
+
+        return (
+          <button
+            key={expense.id}
+            type="button"
+            className="claim-request-card"
+            onClick={() => nav(`/expenses/${expense.id}`)}
+          >
+            <div className="claim-request-card-top">
+              <span className="claim-request-merchant">
+                {expense.merchant}
+              </span>
+              <span className="claim-request-amount">
+                {money(expense.amount, expense.currency)}
+              </span>
+            </div>
+
+            <div className="claim-request-category">
+              {expense.category}
+            </div>
+
+            <div className="claim-request-card-bottom">
+              <span>{timeAgo(expense.date)}</span>
+              {status && (
+                <span className={`status-chip ${status.className}`}>
+                  {status.label}
+                </span>
+              )}
+            </div>
+          </button>
+        )
+      })}
+    </div>
+  </>
+)}
 
           <div className="section-title">Recent expenses</div>
 

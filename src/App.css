@@ -697,3 +697,117 @@ input[type="date"].field-input::-webkit-calendar-picker-indicator {
   font-weight: 600;
   line-height: 1.35;
 }
+
+.home-section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 22px;
+  margin-bottom: 10px;
+}
+
+.home-section-heading .section-title {
+  margin: 0;
+}
+
+.home-section-link {
+  border: none;
+  background: transparent;
+  color: var(--x2p-green-700);
+  padding: 6px 0;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.claim-request-scroll {
+  display: flex;
+  gap: 12px;
+  margin: 0 -20px;
+  padding: 0 20px 14px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 20px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x;
+}
+
+.claim-request-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.claim-request-card {
+  flex: 0 0 238px;
+  min-width: 238px;
+  min-height: 136px;
+  padding: 16px;
+  border: 1px solid var(--x2p-line);
+  border-radius: 14px;
+  background: var(--x2p-surface);
+  color: var(--x2p-ink);
+  box-shadow: 0 8px 22px -16px rgba(16, 36, 26, 0.38);
+  cursor: pointer;
+  scroll-snap-align: start;
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.claim-request-card:active {
+  transform: scale(0.98);
+  box-shadow: 0 4px 14px -12px rgba(16, 36, 26, 0.36);
+}
+
+.claim-request-card-top,
+.claim-request-card-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.claim-request-merchant,
+.claim-request-amount {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.claim-request-merchant {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.claim-request-amount {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--x2p-green-800);
+}
+
+.claim-request-category {
+  min-height: 34px;
+  margin-top: 9px;
+  color: var(--x2p-ink-soft);
+  font-size: 11.5px;
+  line-height: 1.4;
+  overflow: hidden;
+}
+
+.claim-request-card-bottom {
+  margin-top: 12px;
+  color: var(--x2p-ink-faint);
+  font-size: 11px;
+}
+
+.claim-request-card-bottom .status-chip {
+  margin-top: 0;
+}
