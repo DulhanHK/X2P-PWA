@@ -8,6 +8,7 @@ import ExpenseDetail from './pages/ExpenseDetail'
 import Claims from './pages/Claims'
 import Profile from './pages/Profile'
 import './App.css'
+import Approvals from './pages/Approvals'
  
 function Gate({ children }) {
   return children
@@ -22,6 +23,7 @@ function Shell() {
       <Route path="/expenses/:id" element={<Gate><ExpenseDetail /></Gate>} />
       <Route path="/claims" element={<Gate><Claims /></Gate>} />
       <Route path="/profile" element={<Gate><Profile /></Gate>} />
+      <Route path="/approvals" element={<Gate><Approvals /></Gate>} />
       <Route path="*" element={<Navigate to="/home" replace />} />
     </Routes>
   )
