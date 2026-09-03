@@ -206,6 +206,19 @@
   background: var(--x2p-surface);
   font-size: 14px; color: var(--x2p-ink);
 }
+
+input[type="date"].field-input {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  inline-size: 100%;
+  max-inline-size: 100%;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
 input[type="date"].field-input::-webkit-calendar-picker-indicator {
   margin-left: 6px;
   padding: 4px;
@@ -554,6 +567,20 @@ input[type="date"].field-input::-webkit-calendar-picker-indicator {
   display: flex; align-items: center; gap: 12px; margin-bottom: 9px;
   border: none; width: 100%; text-align: left; cursor: pointer;
 }
+
+.sheet .list-row {
+  color: var(--x2p-ink);
+  -webkit-tap-highlight-color: transparent;
+  appearance: none;
+}
+
+.sheet .list-row:active,
+.sheet .list-row:focus {
+  background: var(--x2p-surface);
+  color: var(--x2p-ink);
+  outline: none;
+}
+
 .list-row-chevron { color: var(--x2p-ink-faint); flex-shrink: 0; }
 .select-dot {
   width: 20px; height: 20px; border-radius: 6px; border: 1.5px solid var(--x2p-line);

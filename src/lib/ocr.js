@@ -2,9 +2,9 @@ import { CATEGORIES } from '../store/store'
 
 const OCR_API_URL = import.meta.env.VITE_OCR_API_URL || ''
 // OCR-friendly limits: smaller than original camera images, but clear enough for receipt text.
-const OCR_IMAGE_TARGET_BYTES = 750 * 1024
-const OCR_IMAGE_MAX_DIMENSION = 2048
-const OCR_IMAGE_MIN_DIMENSION = 1200
+const OCR_IMAGE_TARGET_BYTES = 1.5 * 1024 * 1024
+const OCR_IMAGE_MAX_DIMENSION = 2560
+const OCR_IMAGE_MIN_DIMENSION = 1400
 
 export const AI_DISCLAIMER =
   'These details were filled in automatically by AI receipt scanning. Please check them carefully and correct anything wrong before submitting.'
@@ -78,7 +78,7 @@ export async function compressReceiptImage(file) {
       canvas.height = height
       context.drawImage(image, 0, 0, width, height)
 
-      const blob = await canvasToBlob(canvas, Math.max(0.65, 0.88 - attempt * 0.05))
+      const blob = await canvasToBlob(canvas, Math.max(0.72, 0.92 - attempt * 0.04))
       if (blob.size <= OCR_IMAGE_TARGET_BYTES || Math.min(width, height) <= OCR_IMAGE_MIN_DIMENSION) {
         return new File([blob], `${file.name.replace(/\.[^.]+$/, '') || 'receipt'}.jpg`, {
           type: 'image/jpeg',
