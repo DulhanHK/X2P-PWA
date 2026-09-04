@@ -8,6 +8,7 @@ import { ChevronLeft } from 'lucide-react'
 export default function TopBar({ title, subtitle, onBack }) {
   const { state } = useStore()
   const nav = useNavigate()
+  const displaySubtitle = subtitle || (title === 'X2P' ? `Hi, ${state.user.name?.split(' ')[0] || 'User'}` : '')
 
   return (
     <div className="topbar">
@@ -21,12 +22,12 @@ export default function TopBar({ title, subtitle, onBack }) {
         )}
         <div>
           <div className="topbar-title">{title}</div>
-          {subtitle && <div className="topbar-sub">{subtitle}</div>}
+          {displaySubtitle && <div className="topbar-sub">{displaySubtitle}</div>}
         </div>
       </div>
       <div className="topbar-actions">
         <button className="avatar-circle" onClick={() => nav('/profile')} aria-label="Profile">
-          {initials(state.user.name)}
+          {initials(state.user.name || 'User')}
         </button>
       </div>
     </div>

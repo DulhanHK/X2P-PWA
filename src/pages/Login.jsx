@@ -23,6 +23,8 @@ export default function Login() {
     setSubmitting(true)
     try {
       const { user } = await login({ username, password, role })
+      // Save user data to store
+      dispatch({ type: 'SET_USER', user: { name: user.name, userId: user.userId || null, email: user.email || '', department: user.department || '' } })
       setStage('biometric')
       setTimeout(() => {
         dispatch({ type: 'SET_ROLE', role: user.role || role })

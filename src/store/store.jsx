@@ -128,38 +128,17 @@ function daysAgo(n) { return new Date(Date.now() - n * 86400000).toISOString() }
 
 // ---- Seed data -----------------------------------------------------------
 
-const seedExpenses = [
-  { id: uid('exp'), merchant: 'Pret A Manger', date: daysAgo(0), amount: 9.85, currency: 'GBP', category: 'Individual Meals (7-4340)', paymentType: 'Company Card', businessPurpose: '', notes: '', receiptImage: null, source: 'card', status: 'draft', history: [{ status: 'draft', actor: 'Radika G.', at: daysAgo(0) }] },
-  { id: uid('exp'), merchant: 'Uber', date: daysAgo(1), amount: 27.8, currency: 'GBP', category: 'Taxi (7-4300)', paymentType: 'Company Card', businessPurpose: '', notes: '', receiptImage: null, source: 'card', status: 'draft', history: [{ status: 'draft', actor: 'Radika G.', at: daysAgo(1) }] },
-  { id: uid('exp'), merchant: 'The Ivy Brasserie', date: daysAgo(2), amount: 84.5, currency: 'GBP', category: 'Entertainment - Client (7-4500)', paymentType: 'Company Card', businessPurpose: 'Client dinner — Q3 renewal discussion', notes: '', receiptImage: null, source: 'expenseit', status: 'submitted', history: [{ status: 'draft', actor: 'Radika G.', at: daysAgo(3) }, { status: 'submitted', actor: 'Radika G.', at: daysAgo(2) }] },
-  { id: uid('exp'), merchant: 'Heathrow Express', date: daysAgo(4), amount: 38.9, currency: 'GBP', category: 'Train (7-4330)', paymentType: 'Cash / Out of Pocket', businessPurpose: 'Site visit — Manchester distribution centre', notes: '', receiptImage: null, source: 'expenseit', status: 'submitted', history: [{ status: 'draft', actor: 'Radika G.', at: daysAgo(5) }, { status: 'submitted', actor: 'Radika G.', at: daysAgo(4) }] },
-  { id: uid('exp'), merchant: 'Premier Inn Manchester', date: daysAgo(4), amount: 119, currency: 'GBP', category: 'Hotel', paymentType: 'Company Card', businessPurpose: 'Site visit — overnight stay', notes: '', receiptImage: null, source: 'card', status: 'approved', history: [
-    { status: 'draft', actor: 'Radika G.', at: daysAgo(6) },
-    { status: 'submitted', actor: 'Radika G.', at: daysAgo(5) },
-    { status: 'approved', actor: 'D. Wickramasinghe', at: daysAgo(3) },
-  ] },
-  { id: uid('exp'), merchant: 'BT Business', date: daysAgo(14), amount: 210, currency: 'GBP', category: 'Telephone/Internet/Fax (7-3200)', paymentType: 'Company Card', businessPurpose: 'Site broadband — Vauxhall office', notes: 'Monthly recurring', receiptImage: null, source: 'manual', status: 'paid', history: [
-    { status: 'draft', actor: 'Radika G.', at: daysAgo(15) },
-    { status: 'submitted', actor: 'Radika G.', at: daysAgo(14) },
-    { status: 'approved', actor: 'D. Wickramasinghe', at: daysAgo(12) },
-    { status: 'paid', actor: 'Finance / PIS Settlement', at: daysAgo(8) },
-  ] },
-  { id: uid('exp'), merchant: 'DHL Express', date: daysAgo(6), amount: 56.2, currency: 'GBP', category: 'Courier/Shipping/Freight (6-4100)', paymentType: 'Cash / Out of Pocket', businessPurpose: 'Sample shipment to Colombo warehouse', notes: '', receiptImage: null, source: 'expenseit', status: 'rejected', history: [
-    { status: 'draft', actor: 'Radika G.', at: daysAgo(7) },
-    { status: 'submitted', actor: 'Radika G.', at: daysAgo(6) },
-    { status: 'rejected', actor: 'D. Wickramasinghe', at: daysAgo(5), comment: 'Missing customs invoice for this shipment.' },
-  ] },
-]
+// Removed seed expenses - now loaded from API via getExpenses()
 
 function loadInitial() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (raw) return JSON.parse(raw)
-  } catch (e) { /* corrupt cache, fall through to seed */ }
+  } catch (e) { /* corrupt cache, fall through to default */ }
   return {
     role: null,
-    user: { name: 'RadikaG', email: 'radika.gunawardana@helabrands.com', department: 'Commercial' },
-    expenses: seedExpenses,
+    user: { name: 'Loading...', userId: null, email: '', department: '' },
+    expenses: [],
   }
 }
 
@@ -169,6 +148,10 @@ const StoreContext = createContext(null)
 
 function reducer(state, action) {
   switch (action.type) {
+    case 'SET_USER':
+      return { ...state, user: action.user }
+    case 'SET_EXPENSES':
+      return { ...state, expenses: action.expenses }
     case 'SET_ROLE':
       return { ...state, role: action.role }
     case 'LOG_OUT':
@@ -224,7 +207,10 @@ export function useStore() {
 }
 
 export function actorName(role, state) {
-  return role === 'manager' ? 'D. Wickramasinghe' : state.user.name.split(' ')[0] + ' ' + state.user.name.split(' ')[1][0] + '.'
+  if (role === 'manager') return 'Manager'
+  if (!state.user.name) return 'User'
+  const parts = state.user.name.split(' ')
+  return parts.length >= 2 ? parts[0] + ' ' + parts[1][0] + '.' : parts[0]
 }
 
 export { CATEGORY_GROUPS, CATEGORIES, PAYMENT_TYPES, CURRENCIES, uid }
