@@ -9,10 +9,16 @@ const OCR_IMAGE_MIN_DIMENSION = 1400
 export const AI_DISCLAIMER =
   'These details were filled in automatically by AI receipt scanning. Please check them carefully and correct anything wrong before submitting.'
 
+function stripCode(label) {
+  return label.replace(/\s*\([^()]*\)\s*$/, '').trim()
+}
+
 function matchCategory(raw) {
   if (!raw) return 'Other'
   if (CATEGORIES.includes(raw)) return raw
-  const needle = raw.toLowerCase()
+  const needle = raw.trim().toLowerCase()
+  const exact = CATEGORIES.find((c) => stripCode(c).toLowerCase() === needle)
+  if (exact) return exact
   const hit = CATEGORIES.find((c) => c.toLowerCase().includes(needle) || needle.includes(c.toLowerCase()))
   return hit || 'Other'
 }
@@ -23,7 +29,7 @@ function normalizeResult(raw) {
     amount: String(raw.amount ?? raw.total_amount ?? ''),
     currency: raw.currency || 'GBP',
     date: raw.date || raw.invoice_date || new Date().toISOString().slice(0, 10),
-    category: matchCategory(raw.category),
+    category: matchCategory(raw.expense_type || raw.category),
     country: raw.country || raw.vendor_country || raw.merchant_country || '',
     location: raw.location || raw.vendor_address || raw.merchant_address || raw.address || '',
     invoiceNumber: raw.invoice_number ?? raw.invoiceNumber ?? null,
