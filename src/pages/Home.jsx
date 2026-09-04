@@ -21,37 +21,12 @@ export default function Home() {
     new Date(secondExpense.date) - new Date(firstExpense.date)
   )
   const sum = (list) => list.reduce((s, e) => s + e.amount, 0)
-
-  function captureReceipt(event) {
-    const file = event.target.files?.[0]
-
-    // Allows taking or selecting the same photo again after returning.
-    event.target.value = ''
-
-    if (file) {
-      nav('/capture', { state: { mode: 'camera', file } })
-    }
-  }
+  const userName = state.user.name?.split(' ')[0] || 'User'
 
   return (
     <>
-      <input
-        id={cameraInputId}
-        type="file"
-        accept="image/*"
-        capture="environment"
-        hidden
-        onChange={captureReceipt}
-      />
-
-      {!online && (
-        <div className="offline-banner">
-          ● Offline — captures sync automatically once reconnected
-        </div>
-      )}
-
-      <TopBar title="X2P" subtitle={`Hi, ${state.user.name.split(' ')[0]}`} />
-
+      {!online && <div className="offline-banner">● Offline — captures sync automatically once reconnected</div>}
+      <TopBar title="X2P" subtitle={`Hi, ${userName}`} />
       <div className="app-scroll">
         <div className="page" style={{ paddingTop: 0 }}>
           <label className="expenseit-cta" htmlFor={cameraInputId}>
@@ -127,15 +102,7 @@ export default function Home() {
               <p>No expenses yet. Tap "Capture a receipt" to add your first one.</p>
             </div>
           ) : (
-            state.expenses
-              .slice(0, 4)
-              .map((expense) => (
-                <ExpenseRow
-                  key={expense.id}
-                  expense={expense}
-                  onClick={() => nav(`/expenses/${expense.id}`)}
-                />
-              ))
+            state.expenses.slice(0, 5).map((e) => <ExpenseRow key={e.id} expense={e} onClick={() => nav(`/expenses/${e.id}`)} />)
           )}
         </div>
       </div>

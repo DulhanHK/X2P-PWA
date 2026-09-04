@@ -16,10 +16,10 @@ export default function Profile() {
       <div className="app-scroll">
         <div className="page" style={{ paddingTop: 0 }}>
           <div className="card" style={{ marginTop: 18, marginBottom: 18, display: 'flex', alignItems: 'center', gap: 14 }}>
-            <div className="merchant-badge" style={{ width: 52, height: 52, fontSize: 17 }}>{initials(state.user.name)}</div>
+            <div className="merchant-badge" style={{ width: 52, height: 52, fontSize: 17 }}>{initials(state.user.name || 'User')}</div>
             <div>
-              <div style={{ fontWeight: 700, fontSize: 15 }}>{state.user.name}</div>
-              <div className="field-hint" style={{ marginTop: 2 }}>{state.user.email}</div>
+              <div style={{ fontWeight: 700, fontSize: 15 }}>{state.user.name || 'Loading...'}</div>
+              <div className="field-hint" style={{ marginTop: 2 }}>{state.user.department || 'Department'}</div>
             </div>
           </div>
 
