@@ -12,7 +12,9 @@ export default function BottomNav() {
     { path: '/home', label: 'Home', icon: Home },
     { path: '/expenses', label: 'Expenses', icon: Receipt },
   ]
-  const right = state.role === 'manager' ? [{ path: '/claims', label: 'Approvals', icon: ClipboardCheck }] : []
+  const right = state.role === 'manager'
+  ? [{ path: '/approvals', label: 'Approvals', icon: ClipboardCheck }]
+  : []
 
   const Item = ({ path, label, icon: Icon }) => {
     const active = loc.pathname === path

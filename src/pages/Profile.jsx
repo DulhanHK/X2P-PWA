@@ -37,7 +37,15 @@ export default function Profile() {
             </p>
             <div className="chip-row">
               <button className={`toggle-chip ${state.role === 'employee' ? 'active' : ''}`} onClick={() => { dispatch({ type: 'SET_ROLE', role: 'employee' }); nav('/home') }}>Employee view</button>
-              <button className={`toggle-chip ${state.role === 'manager' ? 'active' : ''}`} onClick={() => { dispatch({ type: 'SET_ROLE', role: 'manager' }); nav('/claims') }}>Manager view</button>
+              <button
+                  className={`toggle-chip ${state.role === 'manager' ? 'active' : ''}`}
+                  onClick={() => {
+                    dispatch({ type: 'SET_ROLE', role: 'manager' })
+                    nav('/approvals')
+                  }}
+                >
+                  Manager view
+                </button>
             </div>
           </div>
 
