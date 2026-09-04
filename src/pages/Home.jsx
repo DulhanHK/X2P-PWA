@@ -1,4 +1,4 @@
-import React, { useId } from 'react'
+import React, { useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Camera, Receipt, Inbox } from 'lucide-react'
 import { useStore } from '../store/store'
@@ -12,7 +12,7 @@ export default function Home() {
   const { state } = useStore()
   const nav = useNavigate()
   const online = useOnline()
-  const cameraInputId = useId()
+  const cameraInputRef = useRef(null)
 
   const drafts = state.expenses.filter((e) => e.status === 'draft')
   const pendingClaims = state.expenses
@@ -23,13 +23,34 @@ export default function Home() {
   const sum = (list) => list.reduce((s, e) => s + e.amount, 0)
   const userName = state.user.name?.split(' ')[0] || 'User'
 
+  function handleCameraCapture(event) {
+    const file = event.target.files?.[0]
+    event.target.value = ''
+    if (file) {
+      nav('/capture', { state: { file } })
+    }
+  }
+
   return (
     <>
       {!online && <div className="offline-banner">● Offline — captures sync automatically once reconnected</div>}
       <TopBar title="X2P" subtitle={`Hi, ${userName}`} />
       <div className="app-scroll">
         <div className="page" style={{ paddingTop: 0 }}>
-          <label className="expenseit-cta" htmlFor={cameraInputId}>
+          <input
+            ref={cameraInputRef}
+            type="file"
+            accept="image/*"
+            capture="environment"
+            hidden
+            onChange={handleCameraCapture}
+          />
+
+          <button
+            type="button"
+            className="expenseit-cta"
+            onClick={() => cameraInputRef.current?.click()}
+          >
             <div className="expenseit-cta-icon">
               <Camera size={22} color="#fff" />
             </div>
@@ -39,60 +60,60 @@ export default function Home() {
                 X2P reads the merchant, date, and amount for you
               </div>
             </div>
-          </label>
+          </button>
 
           {pendingClaims.length > 0 && (
-  <>
-    <div className="home-section-heading">
-      <div className="section-title">Claim requests</div>
+            <>
+              <div className="home-section-heading">
+                <div className="section-title">Claim requests</div>
 
-      <button
-        type="button"
-        className="home-section-link"
-        onClick={() => nav('/claims')}
-      >
-        View all
-      </button>
-    </div>
+                <button
+                  type="button"
+                  className="home-section-link"
+                  onClick={() => nav('/claims')}
+                >
+                  View all
+                </button>
+              </div>
 
-    <div className="claim-request-scroll">
-      {pendingClaims.map((expense) => {
-        const status = STATUS_META[expense.status]
+              <div className="claim-request-scroll">
+                {pendingClaims.map((expense) => {
+                  const status = STATUS_META[expense.status]
 
-        return (
-          <button
-            key={expense.id}
-            type="button"
-            className="claim-request-card"
-            onClick={() => nav(`/expenses/${expense.id}`)}
-          >
-            <div className="claim-request-card-top">
-              <span className="claim-request-merchant">
-                {expense.merchant}
-              </span>
-              <span className="claim-request-amount">
-                {money(expense.amount, expense.currency)}
-              </span>
-            </div>
+                  return (
+                    <button
+                      key={expense.id}
+                      type="button"
+                      className="claim-request-card"
+                      onClick={() => nav(`/expenses/${expense.id}`)}
+                    >
+                      <div className="claim-request-card-top">
+                        <span className="claim-request-merchant">
+                          {expense.merchant}
+                        </span>
+                        <span className="claim-request-amount">
+                          {money(expense.amount, expense.currency)}
+                        </span>
+                      </div>
 
-            <div className="claim-request-category">
-              {expense.category}
-            </div>
+                      <div className="claim-request-category">
+                        {expense.category}
+                      </div>
 
-            <div className="claim-request-card-bottom">
-              <span>{timeAgo(expense.date)}</span>
-              {status && (
-                <span className={`status-chip ${status.className}`}>
-                  {status.label}
-                </span>
-              )}
-            </div>
-          </button>
-        )
-      })}
-    </div>
-  </>
-)}
+                      <div className="claim-request-card-bottom">
+                        <span>{timeAgo(expense.date)}</span>
+                        {status && (
+                          <span className={`status-chip ${status.className}`}>
+                            {status.label}
+                          </span>
+                        )}
+                      </div>
+                    </button>
+                  )
+                })}
+              </div>
+            </>
+          )}
 
           <div className="section-title">Recent expenses</div>
 
