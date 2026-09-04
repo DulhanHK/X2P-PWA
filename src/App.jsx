@@ -9,12 +9,15 @@ import Claims from './pages/Claims'
 import Profile from './pages/Profile'
 import './App.css'
 import Approvals from './pages/Approvals'
+import { useInitializeUser } from './hooks/useInitializeUser'
  
 function Gate({ children }) {
   return children
 }
  
 function Shell() {
+  useInitializeUser()
+
   return (
     <Routes>
       <Route path="/home" element={<Gate><Home /></Gate>} />
